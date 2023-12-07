@@ -27,6 +27,7 @@ const pageConfig = computed(
 );
 
 watch(pageConfig, async () => {
+  // page配置变化后，需要等dom更新
   await nextTick();
   const page = document.querySelector<HTMLElement>('.magic-ui-page');
   page && window.magic.onPageElUpdate(page);
@@ -37,11 +38,13 @@ window.magic?.onRuntimeReady({
     return app;
   },
 
+  /** 当编辑器的dsl对象变化时会调用 */
   updateRootConfig(config: MApp) {
     root.value = config;
     app?.setConfig(config, curPageId.value);
   },
 
+  /** 当编辑器的切换页面时会调用 */
   updatePageId(id: Id) {
     curPageId.value = id;
     app?.setPage(id);
@@ -60,6 +63,7 @@ window.magic?.onRuntimeReady({
     return nextTick().then(() => document.getElementById(`${id}`) as HTMLElement);
   },
 
+  /** 新增组件时调用 */
   add({ config, parentId }: UpdateData) {
     if (!root.value) throw new Error('error');
     if (!selectedId.value) throw new Error('error');
@@ -82,6 +86,7 @@ window.magic?.onRuntimeReady({
     }
   },
 
+  /** 更新组件时调用 */
   update({ config, parentId }: UpdateData) {
     if (!root.value || !app) throw new Error('error');
 
@@ -94,6 +99,7 @@ window.magic?.onRuntimeReady({
     }
   },
 
+  /** 删除组件时调用 */
   remove({ id, parentId }: RemoveData) {
     if (!root.value) throw new Error('error');
 

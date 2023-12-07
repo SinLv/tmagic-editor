@@ -1,3 +1,4 @@
+// 组件转接器，可用于扩展自定义组件，默认使用Element
 import { App } from 'vue';
 
 import { setConfig } from './config';
